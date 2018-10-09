@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+
+<st-source>
+<time-stamp>From VisualWorks® Personal Use Edition, 8.3 of July 28, 2017 on October 6, 2018 at 2:40:44 PM</time-stamp>
+
+
+<component-created>
+<name>CS_474_Project_1</name> <type>package</type>
+</component-created><!-- Package CS_474_Project_1* -->
+
+
+<component-created>
+<name>CS_474_Project_1</name> <type>package</type>
+</component-created>
+
+<class>
+<name>DoubleSet</name>
+<environment>Smalltalk</environment>
+<super>Core.CoreSystem</super>
+<private>false</private>
+<indexed-type>none</indexed-type>
+<inst-vars>Xset Yset Xis Yis BranchingString </inst-vars>
+<class-inst-vars></class-inst-vars>
+<imports></imports>
+<category></category>
+<attributes>
+<package>CS_474_Project_1</package>
+</attributes>
+</class>
+
+<comment>
+<class-id>DoubleSet</class-id>
+<body>"DoubleSet"</body>
+</comment>
+
+<class>
+<name>BranchingSet</name>
+<environment>Smalltalk</environment>
+<super>DoubleSet</super>
+<private>false</private>
+<indexed-type>none</indexed-type>
+<inst-vars>root guiString elemChecker lastMap </inst-vars>
+<class-inst-vars></class-inst-vars>
+<imports></imports>
+<category></category>
+<attributes>
+<package>CS_474_Project_1</package>
+</attributes>
+</class>
+
+<comment>
+<class-id>BranchingSet</class-id>
+<body>"BrancginSet"</body>
+</comment>
+
+<class>
+<name>TreeNode</name>
+<environment>Smalltalk</environment>
+<super>BranchingSet</super>
+<private>false</private>
+<indexed-type>none</indexed-type>
+<inst-vars>elem left right </inst-vars>
+<class-inst-vars></class-inst-vars>
+<imports></imports>
+<category></category>
+<attributes>
+<package>CS_474_Project_1</package>
+</attributes>
+</class>
+
+<comment>
+<class-id>TreeNode</class-id>
+<body>"TreeNode"</body>
+</comment>
+
+<class>
+<name>SetCalcUI</name>
+<environment>Smalltalk</environment>
+<super>UI.ApplicationModel</super>
+<private>false</private>
+<indexed-type>none</indexed-type>
+<inst-vars>inputString displayArraySet doubleSet displayYSet displayXSet mapResult mapBlock </inst-vars>
+<class-inst-vars></class-inst-vars>
+<imports></imports>
+<category></category>
+<attributes>
+<package>CS_474_Project_1</package>
+</attributes>
+</class>
+
+<comment>
+<class-id>SetCalcUI</class-id>
+<body>"Set Calculator GUI"</body>
+</comment>
+
+<class>
+<name>ArrayedSet</name>
+<environment>Smalltalk</environment>
+<super>DoubleSet</super>
+<private>false</private>
+<indexed-type>none</indexed-type>
+<inst-vars>items </inst-vars>
+<class-inst-vars></class-inst-vars>
+<imports></imports>
+<category></category>
+<attributes>
+<package>CS_474_Project_1</package>
+</attributes>
+</class>
+
+<comment>
+<class-id>ArrayedSet</class-id>
+<body>"Arrayed Set"</body>
+</comment>
+
+<methods>
+<class-id>DoubleSet</class-id> <category>operations</category>
+
+<body package="CS_474_Project_1" selector="declareXArray">declareXArray"Declares the Xset to be an ArrayedSet"	Xset := ArrayedSet new.	Xis := 'ArrayedSet'.^self</body>
+
+<body package="CS_474_Project_1" selector="intersect">intersect"perform the intersection of X and Ysets and store the result in Xset"| newX |(Xis sameAs: 'ArrayedSet') ifTrue: [ newX  := ArrayedSet new.]						ifFalse: [newX  := BranchingSet new.].(Yis sameAs: 'ArrayedSet') ifTrue: [ Yset items do: [:elem| (Xset checkElem: elem) ifTrue: [newX insert: elem].] ]						ifFalse: [									self IntersectInsertX: (Yset getRoot) for: newX.								Xset := newX.].^self</body>
+
+<body package="CS_474_Project_1" selector="IntersectInsertX:for:">IntersectInsertX: node  for: temp"intersect helper if Xset is a branchingSet"| value |node isNil ifTrue: [^self].value := node elem.self IntersectInsertX: (node left) for: temp.(Xset checkElem: (node elem)) ifTrue: [temp insert: value].self IntersectInsertX: (node right) for: temp.^self</body>
+
+<body package="CS_474_Project_1" selector="union">union"union the Xset and the Yset and store the result in the Xset"(Yis sameAs: 'ArrayedSet') ifTrue: [ Yset items do: [:elem| (Xset checkElem: elem) ifFalse: [Xset insert: elem].] ]ifFalse: [self unionInsertX: (Yset getRoot).].^self</body>
+
+<body package="CS_474_Project_1" selector="insertIntoY:">insertIntoY: element"insert element into Yset"Yset insert: element.^self</body>
+
+<body package="CS_474_Project_1" selector="insertIntoX:">insertIntoX: element"insert element into Xset."	 Xset insert: element.	^self</body>
+
+<body package="CS_474_Project_1" selector="retX">retX"return the Xset"	^Xset</body>
+
+<body package="CS_474_Project_1" selector="printX">printX"print Xset representation to Transcript for debugging"| string1 string2|string2 := ''.(Xis sameAs: 'ArrayedSet') ifTrue: [(Xset getItems) do: [:elem| string2 := string2,( elem printString).											string2 := string2, ' '.].										Transcript show: string2.										Transcript cr.										]ifFalse: [self updateBranchingString: Xset.		string1 := self getBranching.		Transcript show: string1.].</body>
+
+<body package="CS_474_Project_1" selector="retY">retY"return the Yset"	^Yset</body>
+
+<body package="CS_474_Project_1" selector="getXString">getXString"returns the string representation of the calling ArrayedSet or Branching Set for the Xset"| string1 string2|string2 := ''.(Xis sameAs: 'ArrayedSet') ifTrue: [(Xset getItems) do: [:elem| string2 := string2,( elem printString).											string2 := string2, ' '.].										^string2										]ifFalse: [self updateBranchingString: Xset.		string1 := self getBranching.		^string1].</body>
+
+<body package="CS_474_Project_1" selector="declareYBranching">declareYBranching"Declares the Yset to be an BranchingSet"	Yset := BranchingSet new.	Yis := 'BranchingSet'.^self</body>
+
+<body package="CS_474_Project_1" selector="retXis">retXis"return the Xset type string"	^Xis</body>
+
+<body package="CS_474_Project_1" selector="declareXBranching">declareXBranching"Declares the Xset to be an BranchingSet"	Xset := BranchingSet new.	Xis := 'BranchingSet'.^self</body>
+
+<body package="CS_474_Project_1" selector="insert:">insert: element"insert elem into set of caller"^self subclassResponsibility</body>
+
+<body package="CS_474_Project_1" selector="getYString">getYString"returns the string representation of the calling ArrayedSet or Branching Set for the Yset"| string1 string2|string2 := ''.(Yis sameAs: 'ArrayedSet') ifTrue: [(Yset getItems) do: [:elem| string2 := string2,( elem printString).											string2 := string2, ' '.].										^string2										]ifFalse: [self updateBranchingString: Yset.		string1 := self getBranching.		^string1].</body>
+
+<body package="CS_474_Project_1" selector="retYis">retYis"return the Yis type string"	^Yis</body>
+
+<body package="CS_474_Project_1" selector="switch">switch"swaps teh Xset and the Yset"| temp1 temp2 temp3 temp4|temp1 := self retX.temp2 := self retY.temp3 := self retXis.temp4 := self retYis.Xset := temp2.Yset := temp1.Xis := temp4.Yis := temp3.^self</body>
+
+<body package="CS_474_Project_1" selector="updateBranching:">updateBranching: rootN"helper function that updates the string representation of a Branchingset"| dataMem |rootN isNil ifTrue: [^self].dataMem := rootN elem.rootN left isNil ifTrue: []ifFalse: [self updateBranching: (rootN left)].BranchingString := BranchingString, (dataMem printString).BranchingString := BranchingString, ' '.rootN right isNil ifTrue: []ifFalse: [self updateBranching: (rootN right)].^self</body>
+
+<body package="CS_474_Project_1" selector="declareYArray">declareYArray"Declares the Yset to be an ArrayedSet"	Yset := ArrayedSet new.	Yis := 'ArrayedSet'.^self</body>
+
+<body package="CS_474_Project_1" selector="updateBranchingString:">updateBranchingString: SomeBS"updates the BranchingSet string for the calling BranchingSet"| rootN |BranchingString := ''.rootN := SomeBS getRoot.self updateBranching: rootN.^self.</body>
+
+<body package="CS_474_Project_1" selector="printY">printY"print Yset representation to Transcript for debugging"| string1 string2|string2 := ''.(Yis sameAs: 'ArrayedSet') ifTrue: [(Yset getItems) do: [:elem| string2 := string2,( elem printString).											string2 := string2, ' '.].										Transcript show: string2.										Transcript cr.										]ifFalse: [self updateBranchingString: Yset.		string1 := self getBranching.		Transcript show: string1.].</body>
+
+<body package="CS_474_Project_1" selector="unionInsertX:">unionInsertX: node"union helper function in the case that teh Xset is a branchingSet"| value |node isNil ifTrue: [^self].value := node elem.self unionInsertX: (node left).(Xset checkElem: (node elem)) ifFalse: [Xset insert: value].self unionInsertX: (node right).^self</body>
+
+<body package="CS_474_Project_1" selector="getBranching">getBranching"Returns the string representation of the data in the BranchingSet of the caller"^BranchingString</body>
+</methods>
+
+<methods>
+<class-id>DoubleSet</class-id> <category>copying</category>
+
+<body package="CS_474_Project_1" selector="copy">copy"Copies the Branching set or the Arrayed Set of the calling Set"Xset isNil ifTrue: [^self error: 'Cannot copy a null set'].(Xis sameAs: 'ArrayedSet') ifTrue: [Yis := 'ArrayedSet'.	Yset := ArrayedSet new.	Xset items do: [:elememt |  Yset insert: elememt.].						]ifFalse: [Yis := 'BranchingSet'.	Yset := BranchingSet new.	self copyHelp: (Xset getRoot)].^self</body>
+
+<body package="CS_474_Project_1" selector="copyHelp:">copyHelp: node" A helper method for copying a BranchingSet "| value|node isNil ifTrue: [^self].value := node elem.self copyHelp: (node left).Yset insert: value.self copyHelp: (node right).^self.</body>
+</methods>
+
+<methods>
+<class-id>DoubleSet</class-id> <category>initialize-release</category>
+
+<body package="CS_474_Project_1" selector="initialize">initialize	"Initialize a newly created instance. This method must answer the receiver."	super initialize.	Xset := nil.	Yset := nil.	Xis := nil.	Yis := nil.	BranchingString := ''.	" *** Replace this comment with the appropriate initialization code *** "	^self</body>
+</methods>
+
+
+<methods>
+<class-id>BranchingSet</class-id> <category>initialize-release</category>
+
+<body package="CS_474_Project_1" selector="initialize">initialize	"Initialize a newly created instance. This method must answer the receiver."	super initialize.	root := nil.	guiString := ''.	elemChecker := false.	lastMap := nil.	" *** Replace this comment with the appropriate initialization code *** "	^self</body>
+</methods>
+
+<methods>
+<class-id>BranchingSet</class-id> <category>operations</category>
+
+<body package="CS_474_Project_1" selector="getRoot">getRoot"return the root of the calling BranchingSet"^root</body>
+
+<body package="CS_474_Project_1" selector="checkElem:">checkElem: elem"check if an elem is in the calling branching set"elemChecker := false.self checkHelp: root for: elem.^(elemChecker)</body>
+
+<body package="CS_474_Project_1" selector="map:for:">map: aBlock for: node"helper method to map a block for a callign branchingSet"node isNil ifTrue: [^self].self map: aBlock for: node left.	lastMap := aBlock value: node elem.Transcript show: lastMap printString.Transcript cr.self map: aBlock for: node right.	^self</body>
+
+<body package="CS_474_Project_1" selector="checkHelp:for:">checkHelp: node for: element"helper function to check for an elem in a BranchingSet"node isNil ifTrue: [^self].self checkHelp: (node left) for: element.(node elem = element) ifTrue: [elemChecker := true].self checkHelp: (node right) for: element.^self</body>
+
+<body package="CS_474_Project_1" selector="map:">map: aBlock "maps a block across the calling Branching set"lastMap := nil.root isNil ifTrue: [^self error: 'Cannot map nil set'].self map: aBlock for: root.^lastMap</body>
+
+<body package="CS_474_Project_1" selector="insert:">insert: value"insert an element into teh calling BranchingSet"root isNil ifTrue: [root := TreeNode new.].root insert:value.^self</body>
+</methods>
+
+
+<methods>
+<class-id>TreeNode</class-id> <category>accessing</category>
+
+<body package="CS_474_Project_1" selector="right:">right: anObject	"set the right BranchingSet TreeNode"	right := anObject</body>
+
+<body package="CS_474_Project_1" selector="right">right	"return the right BranchingSet TreeNode"	^right</body>
+
+<body package="CS_474_Project_1" selector="elem">elem	"returns the data element for a TreeNode"	^elem</body>
+
+<body package="CS_474_Project_1" selector="elem:">elem: anObject	"set the element of a BranchingSet TreeNode"	elem := anObject</body>
+
+<body package="CS_474_Project_1" selector="left:">left: anObject	"set the left subtree to another Tree node"	left := anObject</body>
+
+<body package="CS_474_Project_1" selector="left">left	"return the left subtree"	^left</body>
+</methods>
+
+<methods>
+<class-id>TreeNode</class-id> <category>operations</category>
+
+<body package="CS_474_Project_1" selector="insert:">insert: value"inserts the value into the appropriate subtreeNode"elem isNil ifTrue: [elem := value.^self].(elem = value) ifTrue: [^self error: 'No duplicates allowed!'].(elem &gt; value) ifTrue: [left isNil ifTrue: [left := TreeNode new.].					left insert: value.^self].(elem &lt; value) ifTrue: [right isNil ifTrue: [right := TreeNode new.].					right insert: value.^self].				^self</body>
+
+<body package="CS_474_Project_1" selector="buildString:">buildString: node"builds the string represention for the treeNode"| elementString |node elem isNil ifTrue: [^self].node left isNil ifTrue: [^self]			ifFalse: [self buildString: (left)].elementString := elem asString.guiString := guiString,  elementString.guiString := guiString,  ' '.node right isNil ifTrue: [^self]			ifFalse: [self buildString: (right)].			^self</body>
+</methods>
+
+<methods>
+<class-id>TreeNode</class-id> <category>initialize-release</category>
+
+<body package="CS_474_Project_1" selector="initialize">initialize	"Initialize a newly created instance. This method must answer the receiver."	super initialize.	" *** Edit the following to properly initialize instance variables ***"	elem := nil.	left := nil.	right := nil.	" *** And replace this comment with additional initialization code *** "	^self</body>
+</methods>
+
+
+<methods>
+<class-id>SetCalcUI class</class-id> <category>interface specs</category>
+
+<body package="CS_474_Project_1" selector="windowSpec">windowSpec	"Tools.UIPainter new openOnClass: self andSelector: #windowSpec"	&lt;resource: #canvas&gt;	^#(#{UI.FullSpec} 		#window: 		#(#{UI.WindowSpec} 			#label: 'CS 474 Set Calculator' 			#min: #(#{Core.Point} 20 20 ) 			#max: #(#{Core.Point} 0 0 ) 			#bounds: #(#{Graphics.Rectangle} 622 179 1232 629 ) 			#colors: 			#(#{UI.LookPreferences} 				#setForegroundColor: #(#{Graphics.ColorValue} #black ) 				#setBackgroundColor: #(#{Graphics.ColorValue} #pink ) 				#setSelectionForegroundColor: #(#{Graphics.ColorValue} #black ) 				#setSelectionBackgroundColor: #(#{Graphics.ColorValue} 5557 6360 7998 ) 				#setBorderColor: #(#{Graphics.ColorValue} #lightGray ) ) ) 		#component: 		#(#{UI.SpecCollection} 			#collection: #(				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 27 0 19 0 ) 					#name: #Label1 					#label: 'Input Values:' 					#style: #large ) 				#(#{UI.InputFieldSpec} 					#layout: #(#{Graphics.LayoutFrame} 157 0 28 0 563 0 47 0 ) 					#name: #InputField1 					#model: #inputString ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 136 0 88 0 253 0 109 0 ) 					#name: #ActionButton1 					#model: #createArraySetX 					#label: 'Create Array Set' 					#defaultable: true 					#legacyButtonLayout: false ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 157.5 0 64 0 ) 					#name: #Label3 					#label: 'X Set Options:' ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 371 0 64 0 ) 					#name: #Label4 					#label: 'Y Set Options:' ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 135.5 0 115 0 253.5 0 136 0 ) 					#name: #ActionButton2 					#model: #createBranchSetX 					#label: 'Create Branch Set' 					#defaultable: true ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 350 0 90 0 467 0 111 0 ) 					#name: #ActionButton3 					#model: #createArraySetY 					#label: 'Create Array Set' 					#defaultable: true ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 349 0 117 0 467 0 138 0 ) 					#name: #ActionButton4 					#model: #createBranchSetY 					#label: 'Create Branch Set' 					#defaultable: true ) 				#(#{UI.InputFieldSpec} 					#layout: #(#{Graphics.LayoutFrame} 157 0 250 0 563 0 269 0 ) 					#name: #InputField3 					#model: #displayYSet 					#isReadOnly: true ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 72 0 161 0 ) 					#name: #Label2 					#label: 'Set X:' 					#style: #large ) 				#(#{UI.InputFieldSpec} 					#layout: #(#{Graphics.LayoutFrame} 157 0 169 0 563 0 188 0 ) 					#name: #InputField4 					#model: #displayXSet 					#isReadOnly: true ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 73 0 240 0 ) 					#name: #Label5 					#label: 'Set Y:' 					#style: #large ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 341 0 206 0 399 0 227 0 ) 					#name: #ActionButton5 					#model: #copyXY 					#label: 'Copy' 					#defaultable: true ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 406 0 206 0 464 0 227 0 ) 					#name: #ActionButton6 					#model: #switchXY 					#label: 'Switch' 					#defaultable: true ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 28 0 200 0 ) 					#name: #Label6 					#label: 'Operations:' 					#style: #large ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 209 0 206 0 267 0 227 0 ) 					#name: #ActionButton7 					#model: #unionXY 					#label: 'Union' 					#defaultable: true ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 275 0 206 0 333 0 227 0 ) 					#name: #ActionButton8 					#model: #intersectXY 					#label: 'Intersect' 					#defaultable: true ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 231 0 291 0 ) 					#name: #Label7 					#label: 'Map Block:' 					#style: #systemDefault ) 				#(#{UI.InputFieldSpec} 					#layout: #(#{Graphics.LayoutFrame} 320 0 294 0 467 0 313 0 ) 					#name: #InputField2 					#model: #mapBlock 					#helpText: '' 					#type: #object ) 				#(#{UI.LabelSpec} 					#layout: #(#{Graphics.LayoutOrigin} 199 0 367 0 ) 					#name: #Label8 					#label: 'Last Block Return:' 					#style: #systemDefault ) 				#(#{UI.InputFieldSpec} 					#layout: #(#{Graphics.LayoutFrame} 320 0 371 0 467 0 390 0 ) 					#name: #InputField5 					#model: #mapResult 					#isReadOnly: true ) 				#(#{UI.ActionButtonSpec} 					#layout: #(#{Graphics.LayoutFrame} 270 0 333 0 388 0 354 0 ) 					#name: #ActionButton9 					#model: #map 					#label: 'Map It' 					#defaultable: true ) ) ) )</body>
+</methods>
+
+
+<methods>
+<class-id>SetCalcUI</class-id> <category>actions</category>
+
+<body package="CS_474_Project_1" selector="unionXY">unionXY	"union the Xset and the Yset and update the GUI"	| XString YString |	doubleSet isNil ifTrue: [^self].	(doubleSet retX) isNil ifTrue: [^self].	(doubleSet retY) isNil ifTrue: [^self].	doubleSet union.	XString:= doubleSet getXString.	self displayXSet value: XString.				YString:= doubleSet getYString.	self displayYSet value: YString.	^self</body>
+
+<body package="CS_474_Project_1" selector="createArraySetX">createArraySetX	"creates an ArrayedSet for the Xset given an inputString from the gui."	| string inputVal XString|	doubleSet isNil ifTrue: [doubleSet := DoubleSet new.].	doubleSet declareXArray.	string := inputString value. 	inputVal := ''.		string  do: [:char | (char = Character space)	 ifTrue: [	"doubleSet insertIntoX: (inputVal asNumber)."																											Transcript show: inputVal.																	Transcript cr.																	(inputVal sameAs: '') ifTrue: []																	ifFalse: [doubleSet insertIntoX: (inputVal asNumber).].																																			inputVal := ''.]																ifFalse: [	inputVal := inputVal, (char asSymbol ).].																																															].		(inputVal sameAs: '') ifTrue: []	ifFalse: [doubleSet insertIntoX: (inputVal asNumber).].	XString:= doubleSet getXString.	self displayXSet value: XString.		^self</body>
+
+<body package="CS_474_Project_1" selector="map">map"map the block from the GUI across all of the Xset"| noc numRet|doubleSet isNil ifTrue: [^self].(doubleSet retX) isNil ifTrue: [^self].noc := mapBlock value.((doubleSet retXis) sameAs: 'ArrayedSet') ifTrue: [ numRet := (doubleSet retX)map: noc.]									ifFalse: [numRet := (doubleSet retX) map: noc].Transcript show: numRet printString.self mapResult value: numRet printString.self mapBlock value: 'Mapped!'.	^self</body>
+
+<body package="CS_474_Project_1" selector="copyXY">copyXY	"This stub method was generated by UIDefiner"	|  YString |	doubleSet isNil ifTrue: [^self].	(doubleSet retX) isNil ifTrue: [^self].	"call the DoubleSet copy method"	doubleSet copy.		"update the Yset with the copied data structure"	YString:= doubleSet getYString.	self displayYSet value: YString.	^self</body>
+
+<body package="CS_474_Project_1" selector="createArraySetY">createArraySetY	"creates an ArrayedSet for the Yset given an inputString from the gui."	| string  inputVal YString|	doubleSet isNil ifTrue: [doubleSet := DoubleSet new.].	doubleSet declareYArray.	string := inputString value. 	inputVal := ''.		string  do: [:char | (char = Character space)	 ifTrue: [	"doubleSet insertIntoX: (inputVal asNumber)."																											Transcript show: inputVal.																	Transcript cr.																	(inputVal sameAs: '') ifTrue: []																	ifFalse: [doubleSet insertIntoY: (inputVal asNumber).].																																			inputVal := ''.]																ifFalse: [	inputVal := inputVal, (char asSymbol ).].																																															].		(inputVal sameAs: '') ifTrue: []	ifFalse: [doubleSet insertIntoY: (inputVal asNumber).].	YString:= doubleSet getYString.	self displayYSet value: YString.		^self</body>
+
+<body package="CS_474_Project_1" selector="intersectXY">intersectXY	"intersect Xset and Yset and store the result in Xset and update the GUI"	| XString YString |	doubleSet isNil ifTrue: [^self].	(doubleSet retX) isNil ifTrue: [^self].	(doubleSet retY) isNil ifTrue: [^self].	doubleSet intersect.	XString:= doubleSet getXString.	self displayXSet value: XString.	YString:= doubleSet getYString.	self displayYSet value: YString.	^self</body>
+
+<body package="CS_474_Project_1" selector="createBranchSetX">createBranchSetX"creates a BranchingSet for the Xset given an inputString from the gui."	| string  inputVal XString|	doubleSet isNil ifTrue: [doubleSet := DoubleSet new.].	doubleSet declareXBranching.	string := inputString value. 	inputVal := ''.		string  do: [:char | (char = Character space)	 ifTrue: [	"doubleSet insertIntoX: (inputVal asNumber)."																											Transcript show: inputVal.																	Transcript cr.																	(inputVal sameAs: '') ifTrue: []																	ifFalse: [doubleSet insertIntoX: (inputVal asNumber).].																																			inputVal := ''.]																ifFalse: [	inputVal := inputVal, (char asSymbol ).].																																															].		(inputVal sameAs: '') ifTrue: []	ifFalse: [doubleSet insertIntoX: (inputVal asNumber).].	XString:= doubleSet getXString.	self displayXSet value: XString.		^self</body>
+
+<body package="CS_474_Project_1" selector="createBranchSetY">createBranchSetY"creates a BranchingSet for the Yset given an inputString from the gui."	| string inputVal YString|	doubleSet isNil ifTrue: [doubleSet := DoubleSet new.].	doubleSet declareYBranching.	string := inputString value. 	inputVal := ''.		string  do: [:char | (char = Character space)	 ifTrue: [	"doubleSet insertIntoX: (inputVal asNumber)."																											Transcript show: inputVal.																	Transcript cr.																	(inputVal sameAs: '') ifTrue: []																	ifFalse: [doubleSet insertIntoY: (inputVal asNumber).].																																			inputVal := ''.]																ifFalse: [	inputVal := inputVal, (char asSymbol ).].																																															].		(inputVal sameAs: '') ifTrue: []	ifFalse: [doubleSet insertIntoY: (inputVal asNumber).].	YString:= doubleSet getYString.	self displayYSet value: YString.		^self</body>
+
+<body package="CS_474_Project_1" selector="switchXY">switchXY|  YString XString|	"switch the Xset and the Yset and update the GUI"	doubleSet isNil ifTrue: [^self].	(doubleSet retX) isNil ifTrue: [^self].	(doubleSet retY) isNil ifTrue: [^self].	doubleSet switch.	XString:= doubleSet getXString.	self displayXSet value: XString.				YString:= doubleSet getYString.	self displayYSet value: YString.	^self</body>
+</methods>
+
+<methods>
+<class-id>SetCalcUI</class-id> <category>aspects</category>
+
+<body package="CS_474_Project_1" selector="inputString">inputString	"This method was generated by UIDefiner.  Any edits made here	may be lost whenever methods are automatically defined.  The	initialization provided below may have been preempted by an	initialize method."	^inputString isNil		ifTrue:			[inputString := String new asValue]		ifFalse:			[inputString]</body>
+
+<body package="CS_474_Project_1" selector="displayXSet">displayXSet	"This method was generated by UIDefiner.  Any edits made here	may be lost whenever methods are automatically defined.  The	initialization provided below may have been preempted by an	initialize method."	^displayXSet isNil		ifTrue:			[displayXSet := String new asValue]		ifFalse:			[displayXSet]</body>
+
+<body package="CS_474_Project_1" selector="displayYSet">displayYSet	"This method was generated by UIDefiner.  Any edits made here	may be lost whenever methods are automatically defined.  The	initialization provided below may have been preempted by an	initialize method."	^displayYSet isNil		ifTrue:			[displayYSet := String new asValue]		ifFalse:			[displayYSet]</body>
+
+<body package="CS_474_Project_1" selector="mapBlock">mapBlock	"This method was generated by UIDefiner.  Any edits made here	may be lost whenever methods are automatically defined.  The	initialization provided below may have been preempted by an	initialize method."	^mapBlock isNil		ifTrue:			[mapBlock := nil asValue]		ifFalse:			[mapBlock]</body>
+
+<body package="CS_474_Project_1" selector="mapResult">mapResult	"This method was generated by UIDefiner.  Any edits made here	may be lost whenever methods are automatically defined.  The	initialization provided below may have been preempted by an	initialize method."	^mapResult isNil		ifTrue:			[mapResult := String new asValue]		ifFalse:			[mapResult]</body>
+
+<body package="CS_474_Project_1" selector="displayArraySet">displayArraySet	"ArraySet gui element"	^displayArraySet isNil		ifTrue:			[displayArraySet := String new asValue]		ifFalse:			[displayArraySet]</body>
+</methods>
+
+
+<methods>
+<class-id>ArrayedSet</class-id> <category>accessing</category>
+
+<body package="CS_474_Project_1" selector="items:">items: anObject	items := anObject</body>
+
+<body package="CS_474_Project_1" selector="items">items	^items</body>
+</methods>
+
+<methods>
+<class-id>ArrayedSet</class-id> <category>operations</category>
+
+<body package="CS_474_Project_1" selector="checkElem:">checkElem: elem"Check if the elem is in the calling ArrayedSet"^(items includes: elem)</body>
+
+<body package="CS_474_Project_1" selector="getItems">getItems"return the OrderedCollection contained within the ArrayedSet"^items</body>
+
+<body package="CS_474_Project_1" selector="map:">map: aBlock"map aBlock across entire ArrayedSet "| siz |	siz:= items size.	1 to: siz do: [:index | aBlock value: (self items basicAt: index). ].	^(aBlock value: (self items basicAt: siz))</body>
+
+<body package="CS_474_Project_1" selector="insert:">insert: elem"insert an element into the ArrayedSet"(items includes: elem) ifTrue: [^self error: 'No duplicate values allowed!']					ifFalse: [items addLast: elem.].^self</body>
+</methods>
+
+<methods>
+<class-id>ArrayedSet</class-id> <category>initialize-release</category>
+
+<body package="CS_474_Project_1" selector="retStringRep">retStringRep"returns the string representation of the calling ArrayedSet"| retString |retString := ''.items do: [:elem | retString := retString, (elem printString).			retString := retString, ' '.	].^retString</body>
+
+<body package="CS_474_Project_1" selector="initialize">initialize	"Initialize a newly created instance. This method must answer the receiver."	super initialize.	items := OrderedCollection new.	" *** Replace this comment with the appropriate initialization code *** "	^self</body>
+</methods>
+
+
+
+</st-source>
